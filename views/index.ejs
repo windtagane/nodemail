@@ -25,6 +25,7 @@
             <td><%= annuaire[i].username %></td>
             <td><%= annuaire[i].usermail %></td>
             <td><form name="supprimer" action="/suppr/<%= annuaire[i].id %>" method="POST"><input type="submit" value="Supprimer"></form></td>
+            <td><form name="editer" action="/edit/<%= annuaire[i].id %>" method="POST"><input type="submit" value="Editer"></form></td>
             <% } %>
         </tr>
     </tbody>

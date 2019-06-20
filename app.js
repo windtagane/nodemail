@@ -62,11 +62,30 @@ app.post('/ajout', (req, res) => {
 app.post('/suppr/:id', (req, res) => {
     let paramId = req.params.id;
     let deleteSql = 'DELETE FROM annuaire WHERE id = ' + paramId;
-    let query = db.query(deleteSql, paramId, (err, result) => {
+    let query = db.query(deleteSql, (err, result) => {
         if(err) throw err;
         res.redirect('/');
     })
 });
 
+//Edite la donnée
+app.post('/edit/:id', (req, res) => {
+    let paramId = req.params.id;
+    
+    db.query(editSql, (err, result) => {
+        if(err) throw err;
+        res.redirect('/edit/:id');
+    })
+})
+
+//Update
+app.post('/update/:id', (req, res) => {
+    let paramId = req.params.id;
+    let updateSql = 'UPDATE INTO annuaire WHERE id =' + paramId;
+    db.query(updateSql, (err, result) => {
+        if (err) throw err;
+        res.redirect('/');
+    })
+})
 
 app.listen(1234);
