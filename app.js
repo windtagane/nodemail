@@ -2,9 +2,12 @@ const express = require('express'), app = express();
 
 const mysql = require('mysql'),
       bodyParser = require('body-parser'),
-      validator = require('validator');
+      validator = require('validator'),
+      ejslint = require('ejs-lint');
 
 const { check, validationResult } = require('express-validator/check');
+
+let annuaire = 0;
 
 app.set("view engine", "ejs");
 //app.use(bodyParser());
@@ -27,10 +30,17 @@ db.connect((err) => {
     console.log('Connection établie.');
 });
 
-//Affiche l'index
+//Affiche l'index et les données de la table annuaire
 app.get('/', (req, res) => {
-    res.render('index');
+    let showSql = 'SELECT * FROM annuaire';
+    db.query(showSql, (err, result) => {
+        if (err) throw err;
+        res.render('index', {
+            annuaire : result
+        });
+    });
 });
+
 
 //Ajout Nom utilisateur et Mail dans DB
 app.post('/ajout', (req, res) => {
@@ -48,6 +58,15 @@ app.post('/ajout', (req, res) => {
     } else res.send('Erreur - Vérifier que vous avez entré une adresse e-mail valide.');
 });
 
+//Supprime une donnée dans la table annuaire
+app.post('/suppr/:id', (req, res) => {
+    let paramId = req.params.id;
+    let deleteSql = 'DELETE FROM annuaire WHERE id = ' + paramId;
+    let query = db.query(deleteSql, paramId, (err, result) => {
+        if(err) throw err;
+        res.redirect('/');
+    })
+});
 
 
 app.listen(1234);

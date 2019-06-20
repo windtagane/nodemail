@@ -7,10 +7,33 @@
     <title>nodemail</title>
 </head>
 <body>
+
+<table>
+    <thead>
+        <tr>
+            <td>ID</td>
+            <td>Nom d'utilisateur</td>
+            <td>Adresse e-mail</td>
+            <td>Action</td>
+        </tr>
+    </thead>
+    <tbody>
+        
+        <% for(var i = 0; i < annuaire.length; i++) { %>
+        <tr>
+            <td><%= annuaire[i].id %></td>
+            <td><%= annuaire[i].username %></td>
+            <td><%= annuaire[i].usermail %></td>
+            <td><form name="supprimer" action="/suppr/<%= annuaire[i].id %>" method="POST"><input type="submit" value="Supprimer"></form></td>
+            <% } %>
+        </tr>
+    </tbody>
+</table>
+
     <form name="login" action="/ajout" onsubmit="return validation()" method="POST">
-            <input type="text" name="username" placeholder="Nom d'utilisateur">
-            <input type="email" name="usermail" placeholder="Adresse e-mail">
-            <input type="submit" value="Envoyer">
+        <input type="text" name="username" placeholder="Nom d'utilisateur">
+        <input type="email" name="usermail" placeholder="Adresse e-mail">
+        <input type="submit" value="Envoyer">
     </form>
 
     <script>
