@@ -7,27 +7,26 @@
     <title>nodemail</title>
 </head>
 <body>
-
+<form action="/admin" method="GET">
+    <button type="submit">ADMIN</button>
+</form>
 <table>
     <thead>
         <tr>
-            <td>ID</td>
             <td>Nom d'utilisateur</td>
             <td>Adresse e-mail</td>
-            <td>Action</td>
         </tr>
     </thead>
     <tbody>
         
         <% for(var i = 0; i < annuaire.length; i++) { %>
+        <% if (annuaire[i].statut == true) { %>
         <tr>
-            <td><%= annuaire[i].id %></td>
             <td><%= annuaire[i].username %></td>
             <td><%= annuaire[i].usermail %></td>
-            <td><form name="supprimer" action="/suppr/<%= annuaire[i].id %>" method="POST"><input type="submit" value="Supprimer"></form></td>
-            <td><form name="editer" action="/edit/<%= annuaire[i].id %>" method="POST"><input type="submit" value="Editer"></form></td>
-            <% } %>
         </tr>
+            <% } else { %> <% } %>
+        <% } %>
     </tbody>
 </table>
 

@@ -3,7 +3,8 @@ const express = require('express'), app = express();
 const mysql = require('mysql'),
       bodyParser = require('body-parser'),
       validator = require('validator'),
-      ejslint = require('ejs-lint');
+      ejslint = require('ejs-lint'),
+      flash = require('express-flash');
 
 const { check, validationResult } = require('express-validator/check');
 
@@ -41,6 +42,37 @@ app.get('/', (req, res) => {
     });
 });
 
+//Redirection vers ADMIN
+app.get('/admin', (req, res) => {
+    let showSql = 'SELECT * FROM annuaire';
+    db.query(showSql, (err, result) => {
+        if(err) throw err;
+        res.render('admin', {
+            annuaire : result
+        })
+    })
+})
+
+//Changement statut
+app.post('/admin/statut/:id', (req, res) => {
+    let paramStatut = Boolean(req.body.statut);
+    let paramId = req.params.id;
+    console.log('1. Avant: ' + paramStatut);
+    
+    /* if (paramStatut == true) {
+        paramStatut = false;
+    } else {
+        paramStatut = true;
+    } */
+
+    console.log('2. Après: ' + paramStatut);
+    let updateStatutSql = 'UPDATE annuaire SET statut = ' + paramStatut + ' WHERE id = ' + paramId;
+    console.log('3. Requete SQL : ' + updateStatutSql);
+    db.query(updateStatutSql, (err, result) => {
+        if(err) throw err;
+        res.redirect('/admin');
+    }) 
+})
 
 //Ajout Nom utilisateur et Mail dans DB
 app.post('/ajout', (req, res) => {
@@ -68,24 +100,6 @@ app.post('/suppr/:id', (req, res) => {
     })
 });
 
-//Edite la donnée
-app.post('/edit/:id', (req, res) => {
-    let paramId = req.params.id;
-    
-    db.query(editSql, (err, result) => {
-        if(err) throw err;
-        res.redirect('/edit/:id');
-    })
-})
 
-//Update
-app.post('/update/:id', (req, res) => {
-    let paramId = req.params.id;
-    let updateSql = 'UPDATE INTO annuaire WHERE id =' + paramId;
-    db.query(updateSql, (err, result) => {
-        if (err) throw err;
-        res.redirect('/');
-    })
-})
 
 app.listen(1234);
